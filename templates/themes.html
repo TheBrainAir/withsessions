@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Темы</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+      function submitTheme() {
+          var selectedTheme = document.getElementById('theme-selector').value;
+          console.log('Selected theme:', selectedTheme);
+
+          fetch('/apply_theme', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ theme: selectedTheme })
+          }).then(function(response) {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          }).then(function(data) {
+              console.log('Theme updated:', data);
+              // Reload the page to apply the new theme
+              window.location.reload();
+          }).catch(function(error) {
+              console.error('Error updating theme:', error);
+          });
+      }
+    </script>
+</head>
+<body class=bodytheme >
+    <p class=themeselect >Выберите тему.</p>
+    <select id="theme-selector">
+        <option value="default">Обычная тема</option>
+        <option value="dark">Тёмная тема</option>
+        <option value="light">Светлая тема</option>
+        <!-- Add more themes as needed -->
+    </select>
+    <button onclick="submitTheme()">Применить</button>
+</body>
+</html>
